@@ -1,5 +1,4 @@
 const postcss = require('postcss')
-
 const remRE = /\d?\.?\d+\s*rem/g
 
 function isSupportedProperty(prop, val = null) {
@@ -7,9 +6,9 @@ function isSupportedProperty(prop, val = null) {
   if (!rules) return false
 
   if (val) {
-    if (val.endsWith('vh') || val.endsWith('vw') || val.endsWith('em')) {
-      return false
-    }
+    // if (val.endsWith('vh') || val.endsWith('vw') || val.endsWith('em')) {
+    //   return false
+    // }
 
     if (Array.isArray(rules)) {
       return rules.includes(val)
@@ -18,20 +17,15 @@ function isSupportedProperty(prop, val = null) {
 
   return true
 }
-
 function isSupportedRule(selector) {
-  if (selector.includes(':hover')) {
+  if (selector.endsWith(':hover') || selector.endsWith(':focus')) {
     return false
   }
 
   return true
 }
 
-function isPlaceholderPseudoSelector(selector) {
-  return selector.includes('::placeholder')
-}
-
-module.exports = postcss.plugin('postcss-nativescript', (options = {debug: false}) => {
+module.exports = postcss.plugin('postcss-taro-tailwind', (options = {}) => {
   return root => {
     root.walkRules(rule => {
       if (rule.parent.name === 'media') {
@@ -40,31 +34,6 @@ module.exports = postcss.plugin('postcss-nativescript', (options = {debug: false
 
       if (!isSupportedRule(rule.selector)) {
         rule.remove()
-      }
-
-      if (isPlaceholderPseudoSelector(rule.selector)) {
-        const placeholderSelectors = []
-        rule.selectors.forEach(selector => {
-          if (isPlaceholderPseudoSelector(selector)) {
-            placeholderSelectors.push(selector.replace(/::placeholder/g, ''))
-          }
-        })
-        if (placeholderSelectors.length) {
-          rule.selectors = placeholderSelectors
-          rule.walkDecls(decl => {
-            if (decl.prop === 'color') {
-              decl.replaceWith(decl.clone({prop: 'placeholder-color'}))
-            }
-          })
-        }
-        // rule.selector.replace('::placeholder', '')
-      }
-
-      // replace space and divide selectors to use a simpler selector that works in ns
-      if (rule.selector.includes(':not(template) ~ :not(template)')) {
-        rule.selectors = rule.selectors.map(selector => {
-          return selector.replace(':not(template) ~ :not(template)', '* + *')
-        })
       }
 
       rule.walkDecls(decl => {
@@ -87,7 +56,7 @@ module.exports = postcss.plugin('postcss-nativescript', (options = {debug: false
         // allow using rem values (default unit in tailwind)
         if (decl.value.includes('rem')) {
           decl.value = decl.value.replace(remRE, (match, offset, value) => {
-            const converted = '' + (parseFloat(match) * 16)
+            const converted = '' + (parseFloat(match) * 16)+'px'
 
             options.debug && console.log('replacing rem value', {
               match,
@@ -97,7 +66,7 @@ module.exports = postcss.plugin('postcss-nativescript', (options = {debug: false
             })
 
             return converted
-          })
+          })          
           options.debug && console.log({
             final: decl.value
           })
@@ -117,57 +86,95 @@ module.exports = postcss.plugin('postcss-nativescript', (options = {debug: false
 })
 
 const supportedProperties = {
-  'color': true,
+  'align-content':true,
+  'align-items':true,
+  'align-self': true,
   'background': true,
   'background-color': true,
-  'placeholder-color': true,
   'background-image': true,
-  'background-repeat': ['repeat', 'repeat-x', 'repeat-y', 'no-repeat'],
   'background-position': true,
+  'background-repeat': ['repeat', 'repeat-x', 'repeat-y', 'no-repeat'],
   'background-size': true,
-  'border-color': true,
-  'border-top-color': true,
-  'border-right-color': true,
   'border-bottom-color': true,
-  'border-left-color': true,
-  'border-width': true,
-  'border-top-width': true,
-  'border-right-width': true,
+  'border-bottom-left-radius': true,
+  'border-bottom-right-radius': true,
   'border-bottom-width': true,
+  'border-color': true,
+  'border-left-color': true,
   'border-left-width': true,
   'border-radius': true,
+  'border-right-color': true,
+  'border-right-width': true,
+  'border-style': true,
+  'border-top-color': true,
   'border-top-left-radius': true,
   'border-top-right-radius': true,
-  'border-bottom-right-radius': true,
-  'border-bottom-left-radius': true,
+  'border-top-width': true,
+  'border-width': true,
+  'box-shadow': true,
+  'clip-path': true,
+  'color': true,
+  'display':true,
+  'flex': true,
+  'flex-direction': true,
+  'flex-grow': true,
+  'flex-shrink': true,
+  'flex-wrap':true,
   'font': true,
   'font-family': true,
   'font-size': true,
   'font-style': ['italic', 'normal'],
   'font-weight': true,
+  'gap': true,
+  'grid-auto-flow': true,
+  'grid-column': true,
+  'grid-column-end': true,
+  'grid-column-start': true,
+  'grid-row': true,
+  'grid-row-end': true,
+  'grid-row-start': true,
+  'grid-template-columns': true,
+  'grid-template-rows': true,
+  'height': true,
+  'horizontal-align': ['left', 'center', 'right', 'stretch'],
+  'justify-content':true,
+  'letter-spacing': true,
+  'line-height': true,
+  'margin': true,
+  'margin-bottom': true,
+  'margin-left': true,
+  'margin-right': true,
+  'margin-top': true,
+  'max-height': true,
+  'max-width': true,
+  'min-height': true,
+  'min-width': true,
+  'object-fit': true,
+  'object-position': true,
+  'opacity': true,
+  'overflow': true,
+  'overflow-wrap': true,
+  'padding': true,
+  'padding-bottom': true,
+  'padding-left': true,
+  'padding-right': true,
+  'padding-top': true,
+  'placeholder-color': true,
+  'position':true,
+  'scale': true,
   'text-align': ['left', 'center', 'right'],
   'text-decoration': ['none', 'line-through', 'underline'],
   'text-transform': ['none', 'capitalize', 'uppercase', 'lowercase'],
-  'letter-spacing': true,
-  'line-height': true,
-  'z-index': true,
-  'clip-path': true,
+  'transform-origin': true,
+  'transition': true,
+  'transition-duration': true,
+  'transition-property': true,
+  'transition-timing-function': true,
+  'translate': true,
   'vertical-align': ['top', 'center', 'bottom', 'stretch'],
-  'horizontal-align': ['left', 'center', 'right', 'stretch'],
-  'margin': true,
-  'margin-top': true,
-  'margin-right': true,
-  'margin-bottom': true,
-  'margin-left': true,
-  'width': true,
-  'height': true,
-  'min-width': true,
-  'min-height': true,
-  'padding': true,
-  'padding-top': true,
-  'padding-right': true,
-  'padding-bottom': true,
-  'padding-left': true,
   'visibility': ['visible', 'collapse'],
-  'opacity': true,
+  'white-space': true,
+  'width': true,
+  'word-break': true,
+  'z-index': true,
 }
