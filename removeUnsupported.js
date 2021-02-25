@@ -1,5 +1,6 @@
 const postcss = require('postcss')
 const remRE = /\d?\.?\d+\s*rem/g
+const pxRE = /\d?\.?\d+\s*px/g
 
 function isSupportedProperty(prop, val = null) {
   const rules = supportedProperties[prop]
@@ -46,6 +47,17 @@ module.exports = postcss.plugin('postcss-taro-tailwind', (options = {}) => {
         rule.selector = "page"
       }
 
+      // replace / selector to _
+
+      if(rule.selector.includes('\\/')){
+        rule.selector = rule.selector.replace("\\/","_")
+      }
+
+      // replace . selector to __
+      if(rule.selector.includes('\\.')){
+        rule.selector = rule.selector.replace("\\.","__")
+      }
+
       rule.walkDecls(decl => {
         if (decl.prop === 'visibility') {
           switch (decl.value) {
@@ -67,8 +79,25 @@ module.exports = postcss.plugin('postcss-taro-tailwind', (options = {}) => {
         if (decl.value.includes('rem')) {
           decl.value = decl.value.replace(remRE, (match, offset, value) => {
             const converted = '' + (parseFloat(match) * 16)+'px'
-
             options.debug && console.log('replacing rem value', {
+              match,
+              offset,
+              value,
+              converted
+            })
+
+            return converted
+          })          
+          options.debug && console.log({
+            final: decl.value
+          })
+        }
+
+        // allow using rem values (default unit in tailwind)
+        if (decl.value.includes('px')) {
+          decl.value = decl.value.replace(pxRE, (match, offset, value) => {
+            const converted = '' + (parseFloat(match) * 2)+'px'
+            options.debug && console.log('replacing px value x2', {
               match,
               offset,
               value,
