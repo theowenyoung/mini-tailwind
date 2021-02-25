@@ -18,7 +18,7 @@ function isSupportedProperty(prop, val = null) {
   return true
 }
 function isSupportedRule(selector) {
-  if (selector.endsWith(':hover') || selector.endsWith(':focus')) {
+  if (selector.includes(':hover') || selector.includes(":focus") || selector.includes(":not") ) {
     return false
   }
 
@@ -34,6 +34,16 @@ module.exports = postcss.plugin('postcss-taro-tailwind', (options = {}) => {
 
       if (!isSupportedRule(rule.selector)) {
         rule.remove()
+      }
+
+      // replace space and divide selectors to use a simpler selector that works in ns
+      if (rule.selector.includes(':not(template) ~ :not(template)')) {
+        rule.selectors = rule.selectors.map(selector => {
+          return selector.replace(':not(template) ~ :not(template)', '* + *')
+        })
+      }
+      if(rule.selector==='*'){
+        rule.selector = "page"
       }
 
       rule.walkDecls(decl => {
