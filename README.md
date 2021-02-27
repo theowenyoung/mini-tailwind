@@ -1,224 +1,135 @@
-# nativescript-tailwind
+# 小程序 tailwind
 
-Like using [Tailwind](https://tailwindcss.com/)? You can use it in NativeScript with a little help from this package! 
+在小程序开发里使用 tailwind css, 灵感来自 [taro-tailwind](https://github.com/windedge/taro-tailwind), 但是原项目已经不再适配最新的 postcss 和 tailwind 了，所以这里更新为 mini-tailwind, 供所有小程序开发使用，不限框架，因为 tailwind 本质上是生成一个工具类的 css，写界面的时候便于引用。 mini-tailwind 的逻辑完全独立与小程序本身的任何框架，核心功能就是利用 postcss 生成一个 tailwind 工具类 css
 
-```html
-<Label text="TailwindCSS is awesome!" 
-      class="text-center bg-blue-200 text-blue-600 px-2 py-1 rounded-full" />
-```
-![TailwindCss is awesome!](https://user-images.githubusercontent.com/879060/81098285-73e3ad80-8f09-11ea-8cfa-7e2ec2eebcde.png)
+## 安装
 
-
-# Usage
-
-First, install the package into your project
-
-```bash
-npm install --save nativescript-tailwind
+```shell
+npm install --save-dev mini-tailwind
 ```
 
-Then you can use it in a couple ways:
- 1. [Pre Built CSS](#1-pre-built-css) (Quickest for protyping)
- 2. [Build the CSS based on your own config](#2-build-the-css-based-on-your-own-config)
- 3. [Use as a PostCSS plugin](#3-use-as-a-postcss-plugin) (**Recommended**)
+## 使用
 
+支持 2 种使用方式:
 
-## 1. Pre Built CSS
+1. 直接引入预先生成的 css 文件；
+2. 使用 PostCSS 生成自定义的 css 文件(通过 tailwind.config.js)。
 
-Import the built css based on the default tailwindcss config from `nativescript-tailwind/dist/tailwind.css`
+### 1. 直接引入
 
-This is the easiest and quickest way to try out Tailwind in NativeScript, but you are limited to the default config.
+引入样式文件:
 
-There are a couple ways to do this, for example in a Vue component you can add
-
-```html
-<style src="nativescript-tailwind/dist/tailwind.css" />
-```
-
-Or import it in a css file
-
-```css
-@import "nativescript-tailwind/dist/tailwind.css"
-```
-
-Or import it in your `main.js`
+> 不推荐，样式较大，未个性化定制
 
 ```js
-import 'nativescript-tailwind/dist/tailwind.css'
+import "mini-tailwind/dist/tailwind.css";
 ```
 
-## 2. Build the CSS based on your own config
+### 2. 使用 PostCSS 生成
 
-This package ships with an executable script which can build your css file using your own tailwind config.
+添加 talwindcss 依赖:
 
-```bash
-node node_modules/.bin/nativescript-tailwind tailwind.config.js
-# or
-npx nativescript-tailwind tailwind.config.js
+```shell
+# 使用npm
+npm install --save-dev tailwindcss
+
+# 使用yarn
+yarn add --dev tailwindcss
 ```
 
-## 3. Use as a PostCSS plugin
+复制默认配置 tailwind.config.js 和基础类定义 tailwind.src.css 到项目目录:
 
-To use tailwind with NativeScript, you need to set up PostCSS, below are 2 guides depending on what css flavor you prefer.
-
-<details>
- <summary>With CSS</summary>
- 
- *1. Install dependencies*
- 
- ```bash
- $ yarn add -D tailwindcss nativescript-tailwind postcss postcss-loader
- $ # or using npm
- $ npm install --save-dev tailwindcss nativescript-tailwind postcss postcss-loader
- ```
- 
- *2. Initialize a `tailwind.config.js` (optional)*
- 
- To create a `tailwind.config.js` run
- ```bash
- $ npx tailwindcss init
- ```
- This will create a blank `tailwind.config.js` where you will be able to tweak the default configuration.
- 
- *3. Create a `postcss.config.js`*
- 
- In the root of your project, create a new file and name it `postcss.config.js` with the following contents
- ```js
- module.exports = {
-    plugins: [
-        require('tailwindcss'),
-        require('nativescript-tailwind')
-    ]
- }
- ```
- 
- *4. Add tailwind to your `css`*
- 
- Replace your `app.css` contents with the following 2 tailwind at-rules to pull in tailwind.
- 
- > **Note:** if you already have custom css in your `app.css` you don't have to delete it, the above is only true for fresh projects.
- 
- ```scss
- @tailwind components;
- @tailwind utilities;
- ```
- 
- *5. Update `webpack.config.js` to use PostCSS*
- 
- Find the section of the config that defines the rules/loaders for different file types.
- To quickly find this block - search for `test: /[\/|\\]app\.css$/`.
- 
- For every css block, add the `postcss-loader` to the list of loaders, for example:
- ```diff
- {
-     test: /[\/|\\]app\.css$/,
-     use: [
-         'nativescript-dev-webpack/style-hot-loader',
-         {
-             loader: "nativescript-dev-webpack/css2json-loader",
-             options: { useForImports: true }
-         },
-+       'postcss-loader',
-     ],
- }
- ```
- **Make sure you repeat this step for every css rule (4 by default)**
- 
- *6. Test if everything works!*
- 
- Add some tailwind classes to your layout
- ```html
- <Label class="font-bold text-red-500" text="this text should be bold and red!" />
- ```
- And run the app. If the label is bold and red - everything is working, happy tailwinding!
- 
-</details>
-
-<details>
- <summary>With SCSS</summary>
- 
- *1. Install dependencies*
- 
- ```bash
- $ yarn add -D tailwindcss nativescript-tailwind postcss postcss-loader
- $ # or using npm
- $ npm install --save-dev tailwindcss nativescript-tailwind postcss postcss-loader
- ```
- 
- *2. Initialize a `tailwind.config.js` (optional)*
- 
- To create a `tailwind.config.js` run
- ```bash
- $ npx tailwindcss init
- ```
- This will create a blank `tailwind.config.js` where you will be able to tweak the default configuration.
- 
- *3. Create a `postcss.config.js`*
- 
- In the root of your project, create a new file and name it `postcss.config.js` with the following contents
- ```js
- module.exports = {
-    plugins: [
-        require('tailwindcss'),
-        require('nativescript-tailwind')
-    ]
- }
- ```
- 
- *4. Add tailwind to your `scss`*
- 
- Replace your `app.scss` contents with the following 2 tailwind at-rules to pull in tailwind.
- 
- > **Note:** if you already have custom css in your `app.scss` you don't have to delete it, the above is only true for fresh projects.
- 
- ```scss
- @tailwind components;
- @tailwind utilities;
- ```
- 
- *5. Update `webpack.config.js` to use PostCSS*
- 
- Find the section of the config that defines the rules/loaders for different file types.
- To quickly find this block - search for `test: /[\/|\\]app\.css$/`.
- 
- For every css block, add the `postcss-loader` to the list of loaders, for example:
- ```diff
- {
-     test: /[\/|\\]app\.scss$/,
-     use: [
-         'nativescript-dev-webpack/style-hot-loader',
-         {
-             loader: "nativescript-dev-webpack/css2json-loader",
-             options: { useForImports: true }
-         },
-         'sass-loader',
-+       'postcss-loader'
-     ],
- }
- ```
- **Make sure you repeat this step for every css rule (4 by default)**
- 
- *6. Test if everything works!*
- 
- Add some tailwind classes to your layout
- ```html
- <Label class="font-bold text-red-500" text="this text should be bold and red!" />
- ```
- And run the app. If the label is bold and red - everything is working, happy tailwinding!
- 
-</details>
-
-**For a runnable example with CSS, see the [Demo App](https://github.com/rigor789/demo-nativescript-vue-tailwind)**
-
-## Purging unused CSS
-
-[Read more about purging on the Tailwind docs](https://tailwindcss.com/docs/controlling-file-size/)
-
-To enable purging when building for production, `NODE_ENV` must be set to `production`
-
-```bash
-$ NODE_ENV=production tns build android --production ...
-$ # or
-$ NODE_ENV=production tns build ios --production ...
+```shell
+cp ./node_modules/mini-tailwind/tailwind.config.js ./tailwind.config.js
+cp ./node_modules/mini-tailwind/tailwind.src.css ./src/tailwind.src.css
 ```
 
+在 postcss.config.js 中添加:
+
+```js
+module.exports = {
+  plugins: [
+    // ...
+    require("tailwindcss"),
+    require("taro-tailwind"),
+    // ...
+  ],
+};
+```
+
+然后使用 postcss 执行生成 css 文件:
+
+```shell
+postcss ./src/tailwind.src.css -o ./src/tailwind.css
+```
+
+引入样式文件:
+
+```js
+import "./tailwind.css";
+```
+
+## 注意事项
+
+### 反斜杠和冒号的使用
+
+小程序不支持使用反斜杠和冒号作为类名，因此默认配置文件(tailwind.config.js)中，反斜杠修改成使用下划线(\_)，例如:
+
+```jsx
+<View className="w-1/3"></View>
+```
+
+应该写成:
+
+```jsx
+<View className="w-1_3"></View>
+```
+
+小数改为 `__`, 如 `h-2.5`, 改为 `h-2__5`
+
+## 推荐优化
+
+### 使用 PurgeCSS 简化生成的 tailwind.css
+
+修改 postcss.config.js 文件，使用下面的示例配置：
+
+```js
+const purgecss = require("@fullhuman/postcss-purgecss");
+
+const production = process.env.NODE_ENV === "production";
+
+module.exports = {
+  plugins: [
+    require("tailwindcss"),
+    // require('taro-tailwind')({debug: true}),
+    require("mini-tailwind"),
+    production &&
+      purgecss({
+        content: [
+          "**/*.html",
+          "./src/**/*.js",
+          "./src/**/*.jsx",
+          "./src/**/*.vue",
+          "./src/**/*.mpx",
+          "./src/**/*.tsx",
+        ],
+      }),
+  ],
+};
+```
+
+运行命令生成简化后的 css：
+
+```shell
+NODE_ENV=production postcss ./src/tailwind.src.css -o ./src/tailwind.css
+```
+
+或加到打包脚本(package.json)里：
+
+```json
+{
+  "scripts": {
+    "build:weapp": "cross-env NODE_ENV=production postcss ./src/tailwind.src.css -o ./src/tailwind.css && taro build --type weapp"
+  }
+}
+```

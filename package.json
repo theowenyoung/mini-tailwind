@@ -1,27 +1,28 @@
 {
-  "name": "nativescript-tailwind",
-  "version": "1.3.0",
-  "description": "A tailwind build which works in NativeScript",
+  "name": "mini-tailwind",
+  "version": "1.0.0",
+  "description": "A tailwind build which works in mini programe",
   "main": "removeUnsupported.js",
   "bin": {
-    "nativescript-tailwind": "build.js"
+    "mini-tailwind": "build.js"
   },
   "scripts": {
-    "build": "node build.js"
+    "build": "node build.js",
+    "release": "release-it"
   },
   "files": [
     "dist"
   ],
-  "repository": "https://github.com/rigor789/nativescript-tailwind",
+  "repository": "https://github.com/theowenyoung/mini-tailwind",
   "keywords": [
-    "nativescript",
-    "nativescript-vue",
+    "小程序",
+    "mini",
     "tailwind",
     "tailwindcss",
     "styling",
     "css"
   ],
-  "author": "Igor Randjelovic",
+  "author": "Owen Young <theowenyoung@gmail.com>",
   "nativescript": {
     "platforms": {
       "android": "*",
@@ -37,7 +38,14 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "postcss": "^7.0.27",
-    "tailwindcss": "^1.4.4"
-  }
+    "postcss": "^8.2.6",
+    "postcss-focus": "^5.0.1",
+    "prettier": "^2.2.1",
+    "release-it": "^14.4.1",
+    "tailwindcss": "^2.0.3"
+  },
+  "peerDependencies": {
+    "postcss": "^8.0.0"
+  },
+  "dependencies": {}
 }
