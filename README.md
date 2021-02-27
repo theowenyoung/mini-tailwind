@@ -34,7 +34,7 @@ import "mini-tailwind/dist/tailwind.css";
 npm install --save-dev tailwindcss
 
 # 使用yarn
-yarn add --dev tailwindcss
+yarn add --dev tailwindcss postcss postcss-cli
 ```
 
 复制默认配置 tailwind.config.js 和基础类定义 tailwind.src.css 到项目目录:
