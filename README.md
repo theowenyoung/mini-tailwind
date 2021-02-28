@@ -94,32 +94,35 @@ import "./tailwind.css";
 
 ## 推荐优化
 
-### 使用 PurgeCSS 简化生成的 tailwind.css
+### 使用 purge 参数按需生成 tailwind.css，
 
-修改 postcss.config.js 文件，使用下面的示例配置：
+修改 tailwind.config.js 文件，使用下面的示例配置：
 
 ```js
-const purgecss = require("@fullhuman/postcss-purgecss");
-
-const production = process.env.NODE_ENV === "production";
+const colors = require("tailwindcss/colors");
 
 module.exports = {
-  plugins: [
-    require("tailwindcss"),
-    // require('taro-tailwind')({debug: true}),
-    require("mini-tailwind"),
-    production &&
-      purgecss({
-        content: [
-          "**/*.html",
-          "./src/**/*.js",
-          "./src/**/*.jsx",
-          "./src/**/*.vue",
-          "./src/**/*.mpx",
-          "./src/**/*.tsx",
-        ],
-      }),
+  purge: [
+    "./src/**/*.html",
+    "./src/**/*.vue",
+    "./src/**/*.wxml",
+    "./src/**/*.jsx",
   ],
+  corePlugins: {
+    animation: false,
+    container: false,
+    appearance: false,
+    cursor: false,
+    stroke: false,
+    tableLayout: false,
+    placeholderColor: false,
+    pointerEvents: false,
+    inset: false,
+    float: false,
+    userSelect: false,
+    outline: false,
+    textOverflow: true,
+  },
 };
 ```
 
