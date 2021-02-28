@@ -1,5 +1,5 @@
 const remRE = /\d?\.?\d+\s*rem/g;
-const pxRE = /\d?\.?\d+\s*px/g;
+// const pxRE = /\d?\.?\d+\s*px/g;
 
 function isSupportedProperty(prop, val = null) {
   const rules = supportedProperties[prop];
@@ -102,25 +102,25 @@ module.exports = (options = {}) => {
           });
       }
 
-      // allow using rem values (default unit in tailwind)
-      if (decl.value.includes("px")) {
-        decl.value = decl.value.replace(pxRE, (match, offset, value) => {
-          const converted = "" + parseFloat(match) * 2 + "px";
-          options.debug &&
-            console.log("replacing px value x2", {
-              match,
-              offset,
-              value,
-              converted,
-            });
+      // // allow using rem values (default unit in tailwind)
+      // if (decl.value.includes("px")) {
+      //   decl.value = decl.value.replace(pxRE, (match, offset, value) => {
+      //     const converted = "" + parseFloat(match) * 2 + "px";
+      //     options.debug &&
+      //       console.log("replacing px value x2", {
+      //         match,
+      //         offset,
+      //         value,
+      //         converted,
+      //       });
 
-          return converted;
-        });
-        options.debug &&
-          console.log({
-            final: decl.value,
-          });
-      }
+      //     return converted;
+      //   });
+      //   options.debug &&
+      //     console.log({
+      //       final: decl.value,
+      //     });
+      // }
 
       if (
         !decl.prop.startsWith("--") &&
