@@ -1,5 +1,5 @@
 const remRE = /\d?\.?\d+\s*rem/g;
-// const pxRE = /\d?\.?\d+\s*px/g;
+const pxRE = /\d?\.?\d+\s*px/g;
 
 function isSupportedProperty(prop, val = null) {
   const rules = supportedProperties[prop];
@@ -28,6 +28,8 @@ function isSupportedRule(selector) {
 }
 
 module.exports = (options = {}) => {
+  const unit = options.unit || "px";
+  const designWidth = options.designWidth || 750;
   return {
     postcssPlugin: "postcss-taro-tailwind",
 
@@ -103,24 +105,13 @@ module.exports = (options = {}) => {
       }
 
       // // allow using rem values (default unit in tailwind)
-      // if (decl.value.includes("px")) {
-      //   decl.value = decl.value.replace(pxRE, (match, offset, value) => {
-      //     const converted = "" + parseFloat(match) * 2 + "px";
-      //     options.debug &&
-      //       console.log("replacing px value x2", {
-      //         match,
-      //         offset,
-      //         value,
-      //         converted,
-      //       });
-
-      //     return converted;
-      //   });
-      //   options.debug &&
-      //     console.log({
-      //       final: decl.value,
-      //     });
-      // }
+      if (decl.value.includes("px")) {
+        const ratio = designWidth / 375;
+        decl.value = decl.value.replace(pxRE, (match, offset, value) => {
+          const converted = "" + parseFloat(match) * ratio + unit;
+          return converted;
+        });
+      }
 
       if (
         !decl.prop.startsWith("--") &&
