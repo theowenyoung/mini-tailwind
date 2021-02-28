@@ -69,6 +69,11 @@ postcss ./src/tailwind.src.css -o ./src/tailwind.css
 import "./tailwind.css";
 ```
 
+## 选项
+
+- `unit`, 单位,默认 `px`
+- `designWidth`, 设计稿宽度, 默认 `750`, `text-base`, 相当于 `32px`
+
 ## 注意事项
 
 ### 反斜杠和冒号的使用
