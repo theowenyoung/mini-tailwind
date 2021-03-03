@@ -135,6 +135,7 @@ module.exports = (options = {}) => {
   }
   const designWidth = options.designWidth || 750;
   let globalRules = [];
+  const ratio = designWidth / 375;
   return {
     postcssPlugin: "postcss-mini-tailwind",
     OnceExit() {
@@ -208,14 +209,12 @@ module.exports = (options = {}) => {
       // allow using rem values (default unit in tailwind)
       if (decl.value.includes("rem")) {
         decl.value = decl.value.replace(remRE, (match, offset, value) => {
-          const converted = "" + parseFloat(match) * 16 + "px";
-          options.debug &&
-            console.log("replacing rem value", {
-              match,
-              offset,
-              value,
-              converted,
-            });
+          let converted = "" + parseFloat(match) * 16 + "px";
+
+          converted = converted.replace(pxRE, (match, offset, value) => {
+            const tempconverted = "" + parseFloat(match) * ratio + unit;
+            return tempconverted;
+          });
 
           return converted;
         });
@@ -224,18 +223,13 @@ module.exports = (options = {}) => {
             final: decl.value,
           });
         return;
-      }
-
-      // // allow using rem values (default unit in tailwind)
-      if (decl.value.includes("px")) {
-        const ratio = designWidth / 375;
+      } else if (decl.value.includes("px") && !decl.value.includes("rpx")) {
         decl.value = decl.value.replace(pxRE, (match, offset, value) => {
           const converted = "" + parseFloat(match) * ratio + unit;
           return converted;
         });
         return;
       }
-
       if (
         !decl.prop.startsWith("--") &&
         !isSupportedProperty(decl.prop, decl.value)
