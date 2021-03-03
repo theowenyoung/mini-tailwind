@@ -136,7 +136,7 @@ module.exports = (options = {}) => {
   const designWidth = options.designWidth || 750;
   let globalRules = [];
   return {
-    postcssPlugin: "postcss-taro-tailwind",
+    postcssPlugin: "postcss-mini-tailwind",
     OnceExit() {
       console.log(
         "由于小程序不支持组件级别的page selector, 以下默认全局样式未写入，如需要，可在page的样式文件里手动写入\n"
@@ -156,6 +156,7 @@ module.exports = (options = {}) => {
     Rule(rule) {
       if (!isSupportedRule(rule.selector)) {
         rule.remove();
+        return;
       }
 
       // replace space and divide selectors to use a simpler selector that works in ns
@@ -163,23 +164,27 @@ module.exports = (options = {}) => {
         rule.selectors = rule.selectors.map((selector) => {
           return selector.replace(":not(template) ~ :not(template)", "* + *");
         });
+        return;
       }
 
       if (rule.selector === "*") {
         rule.selector = "page";
         globalRules.push(rule.toString());
         rule.remove();
+        return;
       }
 
       // replace / selector to _
 
       if (rule.selector.includes("\\/")) {
         rule.selector = rule.selector.replace("\\/", "_");
+        return;
       }
 
       // replace . selector to __
       if (rule.selector.includes("\\.")) {
         rule.selector = rule.selector.replace("\\.", "__");
+        return;
       }
     },
     Declaration(decl) {
@@ -218,6 +223,7 @@ module.exports = (options = {}) => {
           console.log({
             final: decl.value,
           });
+        return;
       }
 
       // // allow using rem values (default unit in tailwind)
@@ -227,6 +233,7 @@ module.exports = (options = {}) => {
           const converted = "" + parseFloat(match) * ratio + unit;
           return converted;
         });
+        return;
       }
 
       if (
@@ -235,11 +242,13 @@ module.exports = (options = {}) => {
       ) {
         // options.debug && console.log('removing ', decl.prop, decl.value)
         decl.remove();
+        return;
       }
     },
     RuleExit(rule) {
       if (rule.nodes.length === 0) {
         rule.remove();
+        return;
       }
     },
   };

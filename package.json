@@ -21,7 +21,10 @@
   ],
   "files": [
     "dist",
-    "tailwind.css"
+    "tailwind.css",
+    "tailwind.config.js",
+    "removeUnsupported.js",
+    "build.js"
   ],
   "author": "Owen Young <theowenyoung@gmail.com>",
   "nativescript": {
