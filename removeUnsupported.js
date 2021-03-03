@@ -1,5 +1,7 @@
 const remRE = /\d?\.?\d+\s*rem/g;
 const pxRE = /\d?\.?\d+\s*px/g;
+const processed = Symbol("processed");
+
 let globalProperties = {
   "align-content": true,
   "align-items": true,
@@ -196,9 +198,7 @@ module.exports = (options = {}) => {
             decl.replaceWith(decl.clone({ value: "collapse" }));
             return;
         }
-      }
-
-      if (decl.prop === "vertical-align") {
+      } else if (decl.prop === "vertical-align") {
         switch (decl.value) {
           case "middle":
             decl.replaceWith(decl.clone({ value: "center" }));
@@ -206,8 +206,17 @@ module.exports = (options = {}) => {
         }
       }
 
-      // allow using rem values (default unit in tailwind)
-      if (decl.value.includes("rem")) {
+      // // allow using rem values (default unit in tailwind)
+      if (decl.value.includes("px") && !decl.value.includes("rpx")) {
+        if (!decl[processed]) {
+          decl.value = decl.value.replace(pxRE, (match, offset, value) => {
+            const converted = "" + parseFloat(match) * ratio + unit;
+            return converted;
+          });
+          decl[processed] = true;
+        }
+      } else if (decl.value.includes("rem")) {
+        decl[processed] = true;
         decl.value = decl.value.replace(remRE, (match, offset, value) => {
           let converted = "" + parseFloat(match) * 16 + "px";
 
@@ -222,12 +231,6 @@ module.exports = (options = {}) => {
           console.log({
             final: decl.value,
           });
-        return;
-      } else if (decl.value.includes("px") && !decl.value.includes("rpx")) {
-        decl.value = decl.value.replace(pxRE, (match, offset, value) => {
-          const converted = "" + parseFloat(match) * ratio + unit;
-          return converted;
-        });
         return;
       }
       if (
