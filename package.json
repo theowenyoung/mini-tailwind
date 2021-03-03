@@ -1,6 +1,6 @@
 {
   "name": "mini-tailwind",
-  "version": "1.5.0",
+  "version": "1.4.0",
   "description": "A tailwind build which works in mini programe",
   "main": "removeUnsupported.js",
   "bin": {
@@ -19,6 +19,10 @@
     "styling",
     "css"
   ],
+  "files": [
+    "dist",
+    "tailwind.css"
+  ],
   "author": "Owen Young <theowenyoung@gmail.com>",
   "nativescript": {
     "platforms": {
@@ -36,13 +40,13 @@
   "license": "MIT",
   "devDependencies": {
     "prettier": "^2.2.1",
-    "release-it": "^14.4.1"
-  },
-  "peerDependencies": {
-    "postcss": "^8.0.0"
-  },
-  "dependencies": {
+    "release-it": "^14.4.1",
     "tailwindcss": "^2.0.3",
     "postcss": "^8.2.6"
-  }
+  },
+  "peerDependencies": {
+    "postcss": "^8.0.0",
+    "tailwindcss": "^2.0.0"
+  },
+  "dependencies": {}
 }
