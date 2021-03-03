@@ -27,6 +27,12 @@ import "mini-tailwind/dist/tailwind.css";
 
 ### 2. 使用命令行生成
 
+> 依赖 `tailwindcss`, `postcss`, 如果没装的话，请先安装：
+
+```sh
+npm i tailwindcss postcss
+```
+
 命令：
 
 ```bash
