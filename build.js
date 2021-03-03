@@ -6,7 +6,7 @@ const tailwind = require("tailwindcss");
 
 const filename = "tailwind";
 const args = process.argv.slice(2);
-const config = args[0] || path.join(__dirname, "tailwind.js");
+const config = args[0] || path.join(__dirname, "tailwind.config.js");
 const inputFile = path.join(__dirname, `${filename}.css`);
 const outputFile = path.join(__dirname, `dist/${filename}.css`);
 
@@ -27,6 +27,6 @@ fs.readFile(inputFile, (err, css) => {
       return result;
     })
     .then((result) => {
-      console.log("Built.");
+      console.log("Built success.");
     });
 });
