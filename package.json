@@ -10,9 +10,6 @@
     "build": "node build.js",
     "release": "release-it"
   },
-  "files": [
-    "dist"
-  ],
   "repository": "https://github.com/theowenyoung/mini-tailwind",
   "keywords": [
     "小程序",
