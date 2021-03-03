@@ -35,14 +35,14 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "postcss": "^8.2.6",
-    "postcss-focus": "^5.0.1",
     "prettier": "^2.2.1",
-    "release-it": "^14.4.1",
-    "tailwindcss": "^2.0.3"
+    "release-it": "^14.4.1"
   },
   "peerDependencies": {
     "postcss": "^8.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "tailwindcss": "^2.0.3",
+    "postcss": "^8.2.6"
+  }
 }
