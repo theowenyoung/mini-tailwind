@@ -26,7 +26,7 @@ const main = () => {
       "tailwind config file path",
       path.join(__dirname, "tailwind.config.js")
     )
-    .option("-u, --unit <unit>", "style unit", "px")
+    .option("-u, --unit <unit>", "style unit", "rpx")
     .option("-d, --design-width <width>", "design width", 750);
 
   program.parse(process.argv);

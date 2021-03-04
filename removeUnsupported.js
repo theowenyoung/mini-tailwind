@@ -131,7 +131,7 @@ function isSupportedRule(selector) {
 }
 
 module.exports = (options = {}) => {
-  const unit = options.unit || "px";
+  const unit = options.unit || "rpx";
   if (options.properties) {
     globalProperties = options.properties;
   }

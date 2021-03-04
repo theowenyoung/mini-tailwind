@@ -37,14 +37,13 @@ npm i tailwindcss postcss
 Usage: mini-tailwind [options]
 
 Options:
-  -V, --version        output the version number
-  -o, --output <path>  output file (default:
-                       "mini-tailwind/dist/tailwind.css")
-  -s, --source <path>  tailwind src css (default:
-                       "mini-tailwind/tailwind.css")
-  -c, --config <path>  tailwind config file path (default:
-                       "mini-tailwind/tailwind.config.js")
-  -h, --help           display help for command
+  -V, --version               output the version number
+  -o, --output <path>         output file (default: "mini-tailwind/dist/tailwind.css")
+  -s, --source <path>         tailwind src css (default: "mini-tailwind/tailwind.css")
+  -c, --config <path>         tailwind config file path (default: "mini-tailwind/tailwind.config.js")
+  -u, --unit <unit>           style unit (default: "rpx")
+  -d, --design-width <width>  design width (default: 750)
+  -h, --help                  display help for command
 ```
 
 命令：
