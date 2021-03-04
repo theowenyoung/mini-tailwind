@@ -33,10 +33,32 @@ import "mini-tailwind/dist/tailwind.css";
 npm i tailwindcss postcss
 ```
 
+```bash
+Usage: mini-tailwind [options]
+
+Options:
+  -V, --version        output the version number
+  -o, --output <path>  output file (default:
+                       "mini-tailwind/dist/tailwind.css")
+  -s, --source <path>  tailwind src css (default:
+                       "mini-tailwind/tailwind.css")
+  -c, --config <path>  tailwind config file path (default:
+                       "mini-tailwind/tailwind.config.js")
+  -h, --help           display help for command
+```
+
 命令：
 
 ```bash
-npx mini-tailwind tailwind.config.js
+npx mini-tailwind -c tailwind.config.js
+```
+
+默认输出路径：`node_modules/mini-tailwind/dist/tailwind.css`
+
+指定输出路径：
+
+```sh
+npx mini-tailwind -c tailwind.config.js -o ./src/styles/tailwind.css
 ```
 
 如上，还是这样引用：
