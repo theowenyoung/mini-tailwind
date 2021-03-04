@@ -1,6 +1,6 @@
 {
   "name": "mini-tailwind",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "description": "A tailwind build which works in mini programe",
   "main": "removeUnsupported.js",
   "bin": {
