@@ -25,19 +25,20 @@ const main = () => {
       "-c, --config <path>",
       "tailwind config file path",
       path.join(__dirname, "tailwind.config.js")
-    );
+    )
+    .option("-u, --unit <unit>", "style unit", "px")
+    .option("-d, --design-width <width>", "design width", 750);
 
   program.parse(process.argv);
-  // console.log("program", program);
 
   const options = program.opts();
+
   build(options).catch((e) => {
     throw e;
   });
 };
 const build = async (options) => {
   return new Promise((resolve, reject) => {
-    const args = process.argv.slice(2);
     const config = options.config;
     const inputFile = options.source;
     const outputFile = options.output;
@@ -45,7 +46,7 @@ const build = async (options) => {
     fs.readFile(inputFile, (err, css) => {
       if (err) reject(err);
 
-      postcss([tailwind(config), require("./removeUnsupported")])
+      postcss([tailwind(config), require("./removeUnsupported")(options)])
         .process(css, {
           from: inputFile,
           to: outputFile,
