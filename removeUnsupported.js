@@ -77,7 +77,7 @@ let globalProperties = {
   "padding-right": true,
   "padding-top": true,
   "placeholder-color": true,
-  position: ["absolute", ""],
+  position: true,
   scale: true,
   "text-align": ["left", "center", "right"],
   "text-decoration": ["none", "line-through", "underline"],

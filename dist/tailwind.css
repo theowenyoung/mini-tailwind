@@ -18,6 +18,7 @@
 }
 
 .not-sr-only {
+  position: static;
   width: auto;
   height: auto;
   padding: 0;
@@ -7313,8 +7314,24 @@
   --tw-placeholder-opacity: 1
 }
 
+.static {
+  position: static
+}
+
+.fixed {
+  position: fixed
+}
+
 .absolute {
   position: absolute
+}
+
+.relative {
+  position: relative
+}
+
+.sticky {
+  position: sticky
 }
 
 .inset-0 {
